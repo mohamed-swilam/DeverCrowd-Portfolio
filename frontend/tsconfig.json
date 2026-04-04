@@ -36,7 +36,7 @@
     ".next/dev/types/**/*.ts",
     "app/admin/projects/add/page.jsx",
     "app/admin/projects/[id]/page.jsx",
-    "app/blogs/[slug]/page.jsx",
+    "app/blogs/[slug]/page.tsx",
     "app/admin/blogs/[slug]/page.jsx",
     "data/static/services.js",
     "app/services/page.tsx",

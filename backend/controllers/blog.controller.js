@@ -66,7 +66,7 @@ const getSingleBlog = asyncwrapper(async (req, res, next) => {
 });
 
 const createBlog = asyncwrapper(async (req, res, next) => {
-  const { title, subtitle, category, status, slug, body, tags } = req.body;
+  const { title, subtitle, category, status, slug, body, tags  } = req.body;
 
   if (!title || !body) {
     return res.status(400).json({
@@ -76,6 +76,7 @@ const createBlog = asyncwrapper(async (req, res, next) => {
   }
 
   const blog = new Blog({
+    featured_image: req.file ? req.file.path : null,
     title,
     subtitle,
     category,
@@ -100,7 +101,7 @@ const createBlog = asyncwrapper(async (req, res, next) => {
 
 const modifyBlog = asyncwrapper(async (req, res, next) => {
   const slug = req.params.slug;
-  const { title, subtitle, category, featured_image, tags, body, status } =
+  const { title, subtitle, category, tags, body, status  } =
     req.body;
 
   let blog = await Blog.findOne({ slug });
@@ -113,19 +114,12 @@ const modifyBlog = asyncwrapper(async (req, res, next) => {
     return next(error);
   }
 
-  if (req.user.id !== blog.writer_id.toString()) {
-    const error = errorHandler.create({
-      status: httpResponse.status.unauthorized,
-      message: httpResponse.message.unauthorized,
-    });
-    return next(error);
-  }
 
   const updates = {
     status,
     subtitle,
     category,
-    featured_image,
+    featured_image: req.file ? req.file.path : null,
     tags,
     body,
   };
@@ -161,13 +155,6 @@ const deleteBlog = asyncwrapper(async (req, res, next) => {
     return next(error);
   }
 
-  if (req.user.id !== blog.writer_id.toString()) {
-    const error = errorHandler.create({
-      status: httpResponse.status.unauthorized,
-      message: httpResponse.message.unauthorized,
-    });
-    return next(error);
-  }
   await blog.deleteOne();
 
   res.sendStatus(httpResponse.status.noContent);

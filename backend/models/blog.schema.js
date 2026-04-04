@@ -21,6 +21,10 @@ const likeSchema = mongoose.Schema({
 });
 const blogSchema = mongoose.Schema(
   {
+    featured_image: {
+      type: String,
+      default: null,
+    },
     title: {
       type: String,
       required: false,

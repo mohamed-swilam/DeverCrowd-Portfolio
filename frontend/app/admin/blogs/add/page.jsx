@@ -80,6 +80,7 @@ export default function AdminAddBlogPage() {
         body: "",
         likes: [],
         views: 0,
+        featured_image: null,
     });
     const [errors, setErrors] = useState({});
 
@@ -136,7 +137,9 @@ export default function AdminAddBlogPage() {
         formData.append("status", status);
         formData.append("body", form.body);
         form.tags.forEach((tag) => formData.append("tags[]", tag));
-
+        if (form.featured_image) {
+            formData.append("featured_image", form.featured_image);
+        }
         mutation.mutate(formData);
     };
     return (
@@ -186,6 +189,34 @@ export default function AdminAddBlogPage() {
                                 onChange={handleChange}
                                 className="min-h-[200px] resize-y"
                             />
+                        </FormField>
+                        <FormField label="Featured Image" error={errors.featured_image}>
+                            <Input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) =>
+                                    setForm((prev) => ({ ...prev, featured_image: e.target.files?.[0] ?? null }))
+                                }
+                            />
+                            {form.featured_image && (
+                                <div className="mt-2 flex items-center gap-2">
+                                    <img
+                                        src={URL.createObjectURL(form.featured_image)}
+                                        alt="preview"
+                                        className="h-20 w-32 rounded-lg object-cover border border-border"
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        className="text-destructive"
+                                        onClick={() => setForm((prev) => ({ ...prev, featured_image: null }))}
+                                    >
+                                        <X className="h-4 w-4" />
+                                        Remove
+                                    </Button>
+                                </div>
+                            )}
                         </FormField>
                     </CardContent>
                 </Card>

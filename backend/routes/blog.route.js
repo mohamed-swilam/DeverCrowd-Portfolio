@@ -12,7 +12,7 @@ router
   .route("/")
   .get(auth.isauth, blogController.getAllBlogs)
   .post(
-    upload.none(),
+    upload.single("featured_image"),
     auth.verifyToken,
     auth.allowedTo(roles.ceo, roles.cto),
     blogController.createBlog
@@ -25,7 +25,7 @@ router
   .route("/:slug")
   .get(auth.isauth, blogController.getSingleBlog)
   .patch(
-    upload.none(),
+    upload.single("featured_image"),
     auth.verifyToken,
     validator.blogValidation,
     validateInputs,
