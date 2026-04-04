@@ -230,7 +230,11 @@
 
 .tiptap p {
   margin-bottom: 0.75rem;
-  line-height: 1.7;
+  line-height: 1;
+}
+
+.tiptap p:empty {
+  min-height: 1;
 }
 
 .tiptap ul {
