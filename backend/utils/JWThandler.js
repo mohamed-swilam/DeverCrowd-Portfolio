@@ -6,7 +6,7 @@ const generateJWT = async (payload) => {
     expiresIn: "24h",
   });
   return token;
-};
+}; 
 
 const blacklistJWT = async (token) => {
   try {
