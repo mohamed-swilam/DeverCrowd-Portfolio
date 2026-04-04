@@ -37,7 +37,7 @@ function isActivePath(pathname, href, mode) {
 export function AdminSidebarNav({ className, onNavigate }) {
   const pathname = usePathname();
   const router = useRouter();
-  
+  if (typeof window === "undefined") return null;
   const username = localStorage.getItem('username')
   const handleLogout = async () => {
     try {
