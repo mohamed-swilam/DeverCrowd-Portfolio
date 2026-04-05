@@ -8,7 +8,7 @@ interface NavLink {
 
 const siteLinks: NavLink[] = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
+  { href: "#about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/pricing", label: "Pricing" },
   { href: "/works", label: "Works" },

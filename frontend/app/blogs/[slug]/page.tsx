@@ -9,6 +9,7 @@ import { motion } from "motion/react";
 import { useLenis } from "@/hooks/useLenis";
 import BlogContent from "@/components/ui/Blogcontent";
 
+
 interface Blog {
   _id: string;
   slug: string;
@@ -22,10 +23,25 @@ interface Blog {
   featured_image?: string;
   updatedAt?: string;
   createdAt?: string;
-  likes?: unknown[];
+  likes?: Like[];
   comments?: unknown[];
 }
-
+type Like = {
+  ip: string;
+  userAgent: string;
+  _id: string;
+  likedAt: string;
+};
+const normalizeIP = (ip: string): string => {
+  if (ip === "::1") return "127.0.0.1";
+  if (ip.startsWith("::ffff:")) return ip.replace("::ffff:", "");
+  return ip;
+};
+const isIPExists = (arr: Like[] = [], currentIP: string): boolean => {
+  return arr.some(
+    (item) => normalizeIP(item.ip) === normalizeIP(currentIP)
+  );
+};
 function readTime(body?: string): string {
   if (!body) return "1 min read";
   const words = body.replace(/<[^>]*>/g, "").split(/\s+/).length;
@@ -49,6 +65,23 @@ export default function BlogPage() {
   const [liked, setLiked] = useState(false);
   const [readProgress, setReadProgress] = useState(0);
   const articleRef = useRef<HTMLElement>(null);
+  const userAgent = navigator.userAgent;
+  const [ip, setIp] = useState("");
+
+  useEffect(() => {
+    const getIP = async () => {
+      try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const data: { ip: string } = await res.json();
+        setIp(data.ip);
+      } catch (err) {
+        setIp("Failed to get IP");
+      }
+    };
+
+    getIP();
+  }, []);
+
 
   useEffect(() => {
     async function fetchBlog() {
@@ -56,6 +89,7 @@ export default function BlogPage() {
         const res = await get<{ blog: Blog }>(`/api/blogs/${slug}`);
         if (!res.ok) throw new Error(res.message);
         const data = res.data as { blog: Blog };
+        console.log(data.blog.likes, 0);
         setBlog(data.blog);
         setLikes(data.blog.likes?.length ?? 0);
       } catch {
@@ -66,6 +100,11 @@ export default function BlogPage() {
     }
     fetchBlog();
   }, [slug]);
+
+  useEffect(() => {
+    if (!blog?.likes || !ip || !userAgent) return;
+    setLiked(isIPExists(blog.likes, ip));
+  }, [blog, ip]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -226,7 +265,7 @@ export default function BlogPage() {
         </motion.div>
 
         {/* Body */}
-        <BlogContent html={blog.body||""} />
+        <BlogContent html={blog.body || ""} />
 
         {/* Footer actions */}
         <motion.div
