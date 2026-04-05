@@ -22,9 +22,9 @@ interface Stat {
 }
 
 const stats: Stat[] = [
-  { to: 11, label: "Projects" },
-  { to: 9, label: "Customers" },
-  { to: 5, label: "Yrs Exp." },
+  { to: 5, label: "Projects" },
+  { to: 3, label: "Customers" },
+  { to: 4, label: "Yrs Exp." },
   { to: 3, label: "Industries" },
 ];
 
