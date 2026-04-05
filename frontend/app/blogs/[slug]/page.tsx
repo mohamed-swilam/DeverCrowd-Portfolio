@@ -47,7 +47,10 @@ function readTime(body?: string): string {
   const words = body.replace(/<[^>]*>/g, "").split(/\s+/).length;
   return `${Math.max(1, Math.ceil(words / 200))} min read`;
 }
-
+type LikeResponse = {
+  totalLikes: number;
+  liked: boolean;
+};
 function formatDate(date?: string): string {
   if (!date) return "";
   return new Date(date).toLocaleDateString("en-US", {
@@ -120,10 +123,10 @@ export default function BlogPage() {
 
   const handleLike = async () => {
     try {
-      const res = await post(`/api/blogs/${slug}/like`, {});
+      const res = await post<LikeResponse>(`/api/blogs/${slug}/like`, {});
       if (!res.ok) throw new Error();
-      setLikes((l) => l + 1);
-      setLiked(true);
+      setLikes(res.data?.totalLikes ?? 0);
+      setLiked(res.data?.liked ?? false);
     } catch {
       /* silent */
     }

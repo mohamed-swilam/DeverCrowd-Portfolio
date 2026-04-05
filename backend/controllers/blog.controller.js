@@ -203,7 +203,7 @@ const addLike = asyncwrapper(async (req, res, next) => {
     res.json({
       status: httpResponse.status.ok,
       message: httpResponse.message.likeRemoved,
-      data: { totalLikes: blog.likes.length },
+      data: { totalLikes: blog.likes.length, liked: false },
     });
     return
   }
@@ -214,7 +214,7 @@ const addLike = asyncwrapper(async (req, res, next) => {
   res.json({
     status: httpResponse.status.ok,
     message: httpResponse.message.likeAdded,
-    data: { totalLikes: blog.likes.length },
+    data: { totalLikes: blog.likes.length,  liked: true },
   });
 });
 
