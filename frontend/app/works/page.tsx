@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
+import { Loader2, AlertCircle, ArrowRight, Clock } from "lucide-react";
 import { useProjects, normalizeProject, type NormalizedProject } from "@/hooks/useProjects";
 import { useLenis } from "@/hooks/useLenis";
 import fallbackProjects from "@/data/dynamic/projects";
