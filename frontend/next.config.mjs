@@ -2,7 +2,9 @@
 const nextConfig = {
   allowedDevOrigins: ['10.0.0.4'],
   images: {
-    domains: ["res.cloudinary.com"],
+    remotePatterns: [
+      { protocol: "https", hostname: "res.cloudinary.com" },
+    ],
     remotePatterns: [
       {
         protocol: "http",

@@ -1,21 +1,44 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { PricingPlan, usePublicPricingPlans } from "@/hooks/usePricing";
-import { Check, Star, AlertCircle, Loader2 } from "lucide-react";
+import { Check, Star, AlertCircle, Loader2, Globe, Smartphone, Layers, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { useLenis } from "@/hooks/useLenis";
 
+// ─── Types ─────────────────────────────────────────────────────────────────────
+type ServiceType = "all" | "web" | "mobile" | "web+mobile" | "shopify";
+type BillingCycle = "all" | "monthly" | "yearly" | "one-time";
+
+// ─── Constants ─────────────────────────────────────────────────────────────────
+const SERVICE_TABS: { value: ServiceType; label: string; icon: React.ReactNode }[] = [
+  { value: "all", label: "All", icon: <Layers className="h-4 w-4" /> },
+  { value: "web", label: "Web", icon: <Globe className="h-4 w-4" /> },
+  { value: "mobile", label: "Mobile", icon: <Smartphone className="h-4 w-4" /> },
+  { value: "web+mobile", label: "Web + Mobile", icon: <Layers className="h-4 w-4" /> },
+  { value: "shopify", label: "Shopify", icon: <ShoppingBag className="h-4 w-4" /> },
+];
+
+const BILLING_TABS: { value: BillingCycle; label: string; badge?: string }[] = [
+  { value: "all", label: "All" },
+  { value: "monthly", label: "Monthly" },
+  { value: "yearly", label: "Yearly", badge: "Save 20%" },
+  { value: "one-time", label: "One-time" },
+];
+
+// ─── Plan Card ─────────────────────────────────────────────────────────────────
 function PlanCard({ plan, index }: { plan: PricingPlan; index: number }) {
-  const hasDiscount =  plan.discountPercent > 0;
+  const hasDiscount = plan.discountPercent > 0;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4, delay: index * 0.1, ease: "easeOut" }}
+      key={plan._id}
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12, scale: 0.97 }}
+      transition={{ duration: 0.35, delay: index * 0.07, ease: "easeOut" }}
       className={cn(
         "relative flex flex-col rounded-2xl border border-border bg-card p-7 overflow-visible",
         plan.highlighted && "border-primary/40 shadow-[0_0_0_1px_rgba(56,101,248,0.2)]"
@@ -24,8 +47,10 @@ function PlanCard({ plan, index }: { plan: PricingPlan; index: number }) {
       {/* Most Popular badge */}
       {plan.highlighted && (
         <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
-          <span className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-semibold text-white"
-            style={{ background: "linear-gradient(135deg, var(--primary), var(--accent))" }}>
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-semibold text-white"
+            style={{ background: "linear-gradient(135deg, var(--primary), var(--accent))" }}
+          >
             <Star style={{ width: 10, height: 10, fill: "white" }} />
             Most Popular
           </span>
@@ -35,14 +60,12 @@ function PlanCard({ plan, index }: { plan: PricingPlan; index: number }) {
       {/* Discount ribbon */}
       {hasDiscount && (
         <div className="absolute top-4 -right-0.5 z-10">
-          <div className="relative">
-            <div className="rounded-l-xl px-3 py-1 text-xs font-bold text-white"
-              style={{ background: "linear-gradient(135deg, #e53e3e, #c53030)" }}>
-              {plan.discountPercent}% off
-            </div>
-            <div className="absolute -bottom-2 right-0 w-0 h-0"
-              style={{ borderLeft: "4px solid #9b2c2c", borderBottom: "4px solid transparent" }} />
+          <div className="rounded-l-xl px-3 py-1 text-xs font-bold text-white"
+            style={{ background: "linear-gradient(135deg, #e53e3e, #c53030)" }}>
+            {plan.discountPercent}% off
           </div>
+          <div className="absolute -bottom-2 right-0 w-0 h-0"
+            style={{ borderLeft: "4px solid #9b2c2c", borderBottom: "4px solid transparent" }} />
         </div>
       )}
 
@@ -61,18 +84,14 @@ function PlanCard({ plan, index }: { plan: PricingPlan; index: number }) {
             <p className="text-sm text-muted-foreground line-through mb-1">
               {plan.currency} {plan.originalPrice}
             </p>
-            <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-extrabold text-foreground">
-                {plan.currency} {plan.realPrice ?? plan.originalPrice}
-              </span>
-            </div>
+            <span className="text-4xl font-extrabold text-foreground">
+              {plan.currency} {plan.realPrice ?? plan.originalPrice}
+            </span>
           </>
         ) : (
-          <div className="flex items-baseline gap-1">
-            <span className="text-4xl font-extrabold text-foreground">
-              {plan.originalPrice === 0 ? "Free" : `${plan.currency} ${plan.realPrice ?? plan.originalPrice}`}
-            </span>
-          </div>
+          <span className="text-4xl font-extrabold text-foreground">
+            {plan.originalPrice === 0 ? "Free" : `${plan.currency} ${plan.realPrice ?? plan.originalPrice}`}
+          </span>
         )}
       </div>
 
@@ -85,7 +104,6 @@ function PlanCard({ plan, index }: { plan: PricingPlan; index: number }) {
         </span>
       </div>
 
-      {/* Divider */}
       <div className="h-px bg-border mb-5" />
 
       {/* Features */}
@@ -123,15 +141,45 @@ function PlanCard({ plan, index }: { plan: PricingPlan; index: number }) {
   );
 }
 
+// ─── Page ──────────────────────────────────────────────────────────────────────
 export default function PricingPage() {
   useLenis();
   const { data: plans = [], isLoading, isError } = usePublicPricingPlans();
 
+  const [activeService, setActiveService] = useState<ServiceType>("all");
+  const [activeBilling, setActiveBilling] = useState<BillingCycle>("all");
+
+  // Filter plans based on selections
+  const filteredPlans = useMemo(() => {
+    return plans.filter((plan) => {
+      const serviceMatch = activeService === "all" || (plan as any).serviceType === activeService;
+      const billingMatch = activeBilling === "all" || plan.billingCycle === activeBilling;
+      return serviceMatch && billingMatch;
+    });
+  }, [plans, activeService, activeBilling]);
+
+  // Show only service tabs that have plans
+  const availableServices = useMemo(() => {
+    return SERVICE_TABS.filter((tab) => {
+      if (tab.value === "all") return true;
+      return plans.some((p) => (p as any).serviceType === tab.value);
+    });
+  }, [plans]);
+
+  // Show only billing tabs that have plans
+  const availableBilling = useMemo(() => {
+    return BILLING_TABS.filter((tab) => {
+      if (tab.value === "all") return true;
+      return plans.some((p) => p.billingCycle === tab.value);
+    });
+  }, [plans]);
+
   return (
     <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+
       {/* Header */}
       <motion.div
-        className="mb-16 text-center"
+        className="mb-12 text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -149,8 +197,67 @@ export default function PricingPage() {
           pricing
         </h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Choose the plan that works for you. No hidden fees.
+          Choose the service and plan that works for you. No hidden fees.
         </p>
+      </motion.div>
+
+      {/* ── Service Type Filter ─────────────────────────────────────────────── */}
+      <motion.div
+        className="mb-6 flex flex-wrap items-center justify-center gap-2"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+      >
+        {availableServices.map((tab) => (
+          <button
+            key={tab.value}
+            onClick={() => setActiveService(tab.value)}
+            className={cn(
+              "inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition-all duration-200",
+              activeService === tab.value
+                ? "border-primary/50 bg-primary/10 text-primary"
+                : "border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground"
+            )}
+          >
+            {tab.icon}
+            {tab.label}
+          </button>
+        ))}
+      </motion.div>
+
+      {/* ── Billing Cycle Toggle ────────────────────────────────────────────── */}
+      <motion.div
+        className="mb-12 flex items-center justify-center "
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.15 }}
+      >
+        <div className="inline- rounded-xl border border-border bg-card p-1 gap-1">
+          {availableBilling.map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => setActiveBilling(tab.value)}
+              className={cn(
+                "relative inline-flex items-center gap-2 rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-200",
+                activeBilling === tab.value
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              {tab.label}
+              {tab.badge && (
+                <span className={cn(
+                  "rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
+                  activeBilling === tab.value
+                    ? "bg-white/20 text-white"
+                    : "bg-green-500/15 text-green-500"
+                )}>
+                  {tab.badge}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
       </motion.div>
 
       {/* Loading */}
@@ -170,24 +277,33 @@ export default function PricingPage() {
       )}
 
       {/* Empty */}
-      {!isLoading && !isError && plans.length === 0 && (
-        <p className="py-20 text-center text-muted-foreground">
-          No pricing plans available yet.
-        </p>
+      {!isLoading && !isError && filteredPlans.length === 0 && (
+        <motion.p
+          className="py-20 text-center text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          No plans available for this selection.
+        </motion.p>
       )}
 
-      {/* Plans grid */}
-      {!isLoading && !isError && plans.length > 0 && (
-        <div className={cn(
-          "grid gap-8 pt-6",
-          plans.length === 1 && "mx-auto max-w-sm",
-          plans.length === 2 && "sm:grid-cols-2",
-          plans.length >= 3 && "sm:grid-cols-2 lg:grid-cols-3"
-        )}>
-          {plans.map((plan, index) => (
-            <PlanCard key={plan._id} plan={plan} index={index} />
-          ))}
-        </div>
+      {/* ── Plans Grid ──────────────────────────────────────────────────────── */}
+      {!isLoading && !isError && filteredPlans.length > 0 && (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`${activeService}-${activeBilling}`}
+            className={cn(
+              "grid gap-8 pt-6",
+              filteredPlans.length === 1 && "mx-auto max-w-sm",
+              filteredPlans.length === 2 && "sm:grid-cols-2",
+              filteredPlans.length >= 3 && "sm:grid-cols-2 lg:grid-cols-3"
+            )}
+          >
+            {filteredPlans.map((plan, index) => (
+              <PlanCard key={plan._id} plan={plan} index={index} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
       )}
     </section>
   );

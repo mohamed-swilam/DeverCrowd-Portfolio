@@ -6,6 +6,7 @@ const asyncWrapper = require("../middlewares/asyncWrapper");
 // ─── Allowed fields (sanitize req.body — never spread it directly) ─────────────
 function pickPlanFields(body) {
   const {
+    serviceType,
     billingCycle,
     title,
     slug,
@@ -43,6 +44,11 @@ function pickPlanFields(body) {
       billingCycle: ["monthly", "yearly", "one-time"].includes(billingCycle)
         ? billingCycle
         : "monthly",
+    }),
+    ...(serviceType !== undefined && {
+      serviceType: ["web", "mobile", "web+mobile", "shopify"].includes(serviceType)
+        ? serviceType
+        : "web",
     }),
     ...(discountPercent !== undefined && {
       discountPercent: Number(discountPercent) || 0,
@@ -108,7 +114,7 @@ const createPlan = asyncWrapper(async (req, res, next) => {
         (fields.originalPrice * fields.discountPercent) / 100,
     );
   } else {
-    fields.realPrice = originalPrice;
+    fields.realPrice = fields.originalPrice;;
   }
   const plan = new Pricing(fields);
   await plan.save();

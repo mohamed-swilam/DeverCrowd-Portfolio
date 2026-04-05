@@ -19,7 +19,7 @@ export interface PricingPlan {
     createdAt: string;
     updatedAt: string;
     billingCycle?: "monthly" | "yearly" | "one-time";
-    
+    serviceType: "web" | "mobile" | "web+mobile" | "shopify";
 }
 
 export interface PricingFormData {
@@ -34,6 +34,7 @@ export interface PricingFormData {
     sortOrder: number;
     isActive: boolean;
     billingCycle?: "monthly" | "yearly" | "one-time";
+    serviceType: "web" | "mobile" | "web+mobile" | "shopify";
 }
 
 export interface CreatePlanBody {
@@ -49,6 +50,7 @@ export interface CreatePlanBody {
     sortOrder: number;
     isActive: boolean;
     billingCycle?: "monthly" | "yearly" | "one-time";
+    serviceType: "web" | "mobile" | "web+mobile" | "shopify";
 }
 
 export type UpdatePlanBody = Partial<CreatePlanBody>;

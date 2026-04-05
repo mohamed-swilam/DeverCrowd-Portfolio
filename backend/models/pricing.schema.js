@@ -31,6 +31,11 @@ const pricingSchema = new mongoose.Schema(
       enum: ["monthly", "yearly", "one-time"],
       default: "monthly",
     },
+    serviceType: {
+      type: String,
+      enum: ["web", "mobile", "web+mobile", "shopify"],
+      required: true
+    }
   },
   { timestamps: true },
 );
