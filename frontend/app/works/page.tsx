@@ -19,7 +19,7 @@ function getCategories(projects: NormalizedProject[]): string[] {
 
 export default function WorksPage() {
   useLenis();
-  const { data: projects = [] } = useProjects();
+  const { data: projects = [], isLoading, isError} = useProjects();
   const [activeCategory, setActiveCategory] = useState(ALL);
   const [selectedProject, setSelectedProject] = useState<NormalizedProject | null>(null);
 
