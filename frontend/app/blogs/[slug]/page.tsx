@@ -68,7 +68,6 @@ export default function BlogPage() {
   const [liked, setLiked] = useState(false);
   const [readProgress, setReadProgress] = useState(0);
   const articleRef = useRef<HTMLElement>(null);
-  const userAgent = navigator.userAgent;
   const [ip, setIp] = useState("");
 
   useEffect(() => {
@@ -105,7 +104,7 @@ export default function BlogPage() {
   }, [slug]);
 
   useEffect(() => {
-    if (!blog?.likes || !ip || !userAgent) return;
+    if (!blog?.likes || !ip ) return;
     setLiked(isIPExists(blog.likes, ip));
   }, [blog, ip]);
 

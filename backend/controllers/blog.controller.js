@@ -190,7 +190,7 @@ const addLike = asyncwrapper(async (req, res, next) => {
     res.json({
       status: httpResponse.status.noContent,
       message: httpResponse.message.alreadyLiked,
-      data: { totalLikes: blog.likes.length },
+      data: { totalLikes: blog.likes.length, liked: false },
     });
     return;
   }
