@@ -224,13 +224,7 @@ export default function AdminProjectsPage() {
             {/* Image */}
             {selectedProject.pic && (
               <div className="w-full h-48 sm:h-60 mb-4 rounded-lg overflow-hidden">
-                <Image
-                  src={selectedProject.pic}
-                  alt={selectedProject.title}
-                  width={800}
-                  height={400}
-                  className="w-full h-full object-cover"
-                />
+                <ProjectCover src={selectedProject.pic} title={selectedProject.title} />
               </div>
             )}
 
