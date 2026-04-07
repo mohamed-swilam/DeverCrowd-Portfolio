@@ -21,13 +21,15 @@ function getCategories(projects: NormalizedProject[]): string[] {
 export default function WorksPage() {
   useLenis();
   const { data: projects = [], isLoading, isError} = useProjects();
+  const completed = projects.filter((p) => p.status === "completed");
+
   const [activeCategory, setActiveCategory] = useState(ALL);
   const [selectedProject, setSelectedProject] = useState<NormalizedProject | null>(null);
 
-  const categories = getCategories(projects);
+  const categories = getCategories(completed);
   const filtered = activeCategory === ALL
-    ? projects
-    : projects.filter((p) => p.category === activeCategory);
+    ? completed
+    : completed.filter((p) => p.category === activeCategory);
 
   return (
     <>
