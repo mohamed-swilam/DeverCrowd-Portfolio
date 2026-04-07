@@ -186,14 +186,7 @@ const addLike = asyncwrapper(async (req, res, next) => {
   const alreadyLiked = blog.likes.some(
     (like) => like.ip === ip || like.userAgent === userAgent,
   );
-  if (blog.writer_id.toString() === userId) {
-    res.json({
-      status: httpResponse.status.noContent,
-      message: httpResponse.message.alreadyLiked,
-      data: { totalLikes: blog.likes.length, liked: false },
-    });
-    return;
-  }
+
 
   if (alreadyLiked) {
     blog.likes = blog.likes.filter(
