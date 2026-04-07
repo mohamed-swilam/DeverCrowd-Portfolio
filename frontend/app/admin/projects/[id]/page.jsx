@@ -13,7 +13,6 @@ import { getAdminSelectStyles } from "@/lib/admin-react-select";
 import { toast } from "sonner";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { AdminLoader } from "@/components/admin/AdminLoader";
-import { Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Loader2, X } from "lucide-react";
 
