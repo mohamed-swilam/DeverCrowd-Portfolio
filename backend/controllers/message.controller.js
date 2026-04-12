@@ -46,6 +46,7 @@ const GetMessages = asyncWrapper(async (req, res, next) => {
   });
 });
 
+
 const DelMessages = asyncWrapper(async (req, res, next) => {
   const { id } = req.params;
   const message = await Message.findOne({ _id: id });
@@ -62,6 +63,7 @@ const DelMessages = asyncWrapper(async (req, res, next) => {
     message: httpResponse.message.deleteMessage,
   });
 });
+
 
 module.exports = {
   sendForm,

@@ -2,6 +2,7 @@ const Pricing = require("../models/pricing.schema");
 const httpResponse = require("../utils/httpResponse");
 const errorHandler = require("../utils/errorHandler");
 const asyncWrapper = require("../middlewares/asyncWrapper");
+const Log = require("../models/log.schema");
 
 // ─── Allowed fields (sanitize req.body — never spread it directly) ─────────────
 function pickPlanFields(body) {
@@ -119,6 +120,13 @@ const createPlan = asyncWrapper(async (req, res, next) => {
   const plan = new Pricing(fields);
   await plan.save();
 
+  const log = new Log({
+    user_id: req.user.id,
+    log_for: "Plan",
+    description: `${plan.title} Created By ${req.user.username}`
+  })
+  await log.save()
+
   res.status(201).json({
     status: httpResponse.status.created,
     message: "Plan created",
@@ -163,6 +171,13 @@ const updatePlan = asyncWrapper(async (req, res, next) => {
     );
   }
 
+  const log = new Log({
+    user_id: req.user.id,
+    log_for: "Plan",
+    description: `${plan.title} Updated By ${req.user.username}`
+  })
+  await log.save()
+
   res.json({
     status: httpResponse.status.ok,
     message: "Plan updated",
@@ -181,6 +196,7 @@ const deletePlan = asyncWrapper(async (req, res, next) => {
     );
   }
 
+  
   res.json({
     status: httpResponse.status.ok,
     message: "Plan deleted",

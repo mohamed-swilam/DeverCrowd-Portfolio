@@ -1,5 +1,5 @@
 "use client";
-import Logo from "@/components/Logo";
+import Logo from "@/components/shared/Logo";
 
 export default function SplashScreen() {
   return (

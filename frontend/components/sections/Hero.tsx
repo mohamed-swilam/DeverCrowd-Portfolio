@@ -4,7 +4,7 @@ import { FaEnvelope, FaQuestionCircle } from "react-icons/fa";
 import { motion, Variants } from "motion/react";
 import dynamic from "next/dynamic";
 import { ClipLoader } from "react-spinners";
-import LightRaysCSS from "@/components/LightRaysCSS";
+import LightRaysCSS from "@/components/shared/LightRaysCSS";
 import P from "@/components/ui/P";
 
 const CountUp = dynamic(() => import("@/components/ui/CountUp"), {

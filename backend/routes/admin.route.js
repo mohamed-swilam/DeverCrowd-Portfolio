@@ -39,6 +39,22 @@ router
 router.route("/logout").post(auth.verifyToken, adminController.Logout);
 
 router
+  .route("/logs")
+  .get(
+    auth.verifyToken,
+    auth.allowedTo(roles.ceo, roles.cto),
+    adminController.GetLogs
+  )
+  .delete(
+    auth.verifyToken,
+    auth.allowedTo(roles.ceo, roles.cto),
+    adminController.DelLogs
+  )
+
+
+
+
+router
   .route("/message")
   .get(
     auth.verifyToken,

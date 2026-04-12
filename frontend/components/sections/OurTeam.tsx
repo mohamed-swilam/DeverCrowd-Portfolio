@@ -2,7 +2,7 @@
 import H1 from "@/components/ui/H1";
 import P from "@/components/ui/P";
 import { useAdmins } from "@/hooks/useAdmins";
-import TiltedCard from '../TiltedCard';
+import TiltedCard from '../shared/TiltedCard';
 
 const OurStack = () => {
     const { data: admins = [] } = useAdmins();
@@ -10,7 +10,7 @@ const OurStack = () => {
     return (
         <section
             id="our-team"
-            className="relative min-h-screen flex w-full flex-col items-center justify-center py-16 px-4 sm:px-16 bg-section gap-6 overflow-hidden"
+            className="relative min-h-screen flex w-full flex-col items-center justify-center py-16 px-4 sm:px-16  gap-6 overflow-hidden"
         >
             <div className="absolute top-1 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-96 rounded-full bg-white/5 blur-3xl opacity-90 pointer-events-none z-0" />
             <H1>The Team Behind the Work</H1>

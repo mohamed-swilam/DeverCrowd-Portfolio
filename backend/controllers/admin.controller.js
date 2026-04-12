@@ -1,6 +1,7 @@
 const JWThandler = require("../utils/JWThandler");
 const errorHandler = require("../utils/errorHandler");
 const Admin = require("../models/admin.schema");
+const Log = require("../models/log.schema");
 const bcrypt = require("bcryptjs");
 const httpResponse = require("../utils/httpResponse");
 const asyncWrapper = require("../middlewares/asyncWrapper");
@@ -91,6 +92,23 @@ const Logout = asyncWrapper(async (req, res, next) => {
   });
 });
 
+const GetLogs = asyncWrapper(async (req, res, next) => {
+  const logs = await Log.find().sort({ createdAt: -1 })
+  res.json({
+    status: httpResponse.status.ok,
+    message: "Logs fetched successfully",
+    data: { logs },
+  });
+});
+
+const DelLogs = asyncWrapper(async (req, res, next) => {
+  const logs = await Log.deleteMany({})
+  res.json({
+    status: httpResponse.status.ok,
+    message: "Logs deleted successfully",
+  });
+});
+
 
 const authtest = asyncWrapper(async (req, res, next) => {
   const token = req.headers.authorization;
@@ -103,4 +121,6 @@ module.exports = {
   Logout,
   register,
   authtest,
+  GetLogs,
+  DelLogs
 };

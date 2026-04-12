@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, MotionStyle } from "motion/react";
-import Logo from "../Logo";
+import Logo from "../shared/Logo";
 import { MdDesignServices } from "react-icons/md";
 import { IoTerminal } from "react-icons/io5";
 import { BsShieldLockFill } from "react-icons/bs";

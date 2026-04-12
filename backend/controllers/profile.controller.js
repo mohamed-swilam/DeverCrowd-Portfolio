@@ -63,10 +63,14 @@ const getSingleProfile = asyncWrapper(async (req, res, next) => {
   });
 });
 
+const editProfile = asyncWrapper(async (req, res, next) => {
+  const { username, email, nickname, password, confirm_password } = req.body
+})
+
 const deleteProfile = asyncWrapper(async (req, res, next) => {
-  const id  = req.params.id;
+  const id = req.params.id;
   console.log(id);
-  
+
   const profile = await Admin.findByIdAndDelete(id);
 
   if (!profile) {

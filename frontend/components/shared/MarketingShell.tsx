@@ -1,8 +1,8 @@
 "use client";
 import { usePathname } from "next/navigation";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { SplashGate } from "@/components/SplashGate";
+import Header from "@/components/shared/Header";
+import Footer from "@/components/shared/Footer";
+import { SplashGate } from "@/components/shared/SplashGate";
 
 interface MarketingShellProps {
   children: React.ReactNode;

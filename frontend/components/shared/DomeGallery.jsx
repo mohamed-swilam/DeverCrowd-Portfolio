@@ -36,10 +36,12 @@ const DEFAULT_IMAGES = [
 
 const DEFAULTS = {
   maxVerticalRotationDeg: 5,
-  dragSensitivity: 20,
+  dragSensitivity: 10,
   enlargeTransitionMs: 300,
   segments: 35
 };
+
+const DIRECTION_THRESHOLD = 8; // px قبل ما نقرر الاتجاه
 
 const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 const normalizeAngle = d => ((d % 360) + 360) % 360;
@@ -56,8 +58,6 @@ const getDataNumber = (el, name, fallback) => {
 const resolveCssColor = input => {
   if (!input) return 'var(--background)';
   const v = String(input).trim();
-
-  // Already a valid css color expression
   if (
     v.startsWith('var(') ||
     v.startsWith('#') ||
@@ -70,8 +70,6 @@ const resolveCssColor = input => {
   ) {
     return v;
   }
-
-  // Treat token names like "background" as CSS variable names: var(--background)
   return `var(--${v})`;
 };
 
@@ -175,6 +173,9 @@ export default function DomeGallery({
   const openStartedAtRef = useRef(0);
   const lastDragEndAt = useRef(0);
 
+  // ── اتجاه اللمس: null = لسه مش متحدد، 'h' = أفقي، 'v' = رأسي
+  const touchDirectionRef = useRef(null);
+
   const scrollLockedRef = useRef(false);
   const lockScroll = useCallback(() => {
     if (scrollLockedRef.current) return;
@@ -215,20 +216,11 @@ export default function DomeGallery({
         aspect = w / h;
       let basis;
       switch (fitBasis) {
-        case 'min':
-          basis = minDim;
-          break;
-        case 'max':
-          basis = maxDim;
-          break;
-        case 'width':
-          basis = w;
-          break;
-        case 'height':
-          basis = h;
-          break;
-        default:
-          basis = aspect >= 1.3 ? w : minDim;
+        case 'min': basis = minDim; break;
+        case 'max': basis = maxDim; break;
+        case 'width': basis = w; break;
+        case 'height': basis = h; break;
+        default: basis = aspect >= 1.3 ? w : minDim;
       }
       let radius = basis * fit;
       const heightGuard = h * 1.35;
@@ -274,17 +266,9 @@ export default function DomeGallery({
     ro.observe(root);
     return () => ro.disconnect();
   }, [
-    fit,
-    fitBasis,
-    minRadius,
-    maxRadius,
-    padFactor,
-    resolvedOverlayBlurColor,
-    grayscale,
-    imageBorderRadius,
-    openedImageBorderRadius,
-    openedImageWidth,
-    openedImageHeight
+    fit, fitBasis, minRadius, maxRadius, padFactor,
+    resolvedOverlayBlurColor, grayscale, imageBorderRadius,
+    openedImageBorderRadius, openedImageWidth, openedImageHeight
   ]);
 
   useEffect(() => {
@@ -338,8 +322,21 @@ export default function DomeGallery({
       stopInertia();
 
       pointerTypeRef.current = event.pointerType || 'mouse';
-      if (pointerTypeRef.current === 'touch') event.preventDefault();
-      if (pointerTypeRef.current === 'touch') lockScroll();
+
+      // ── للماوس: السلوك القديم بالظبط
+      if (pointerTypeRef.current !== 'touch') {
+        draggingRef.current = true;
+        cancelTapRef.current = false;
+        movedRef.current = false;
+        startRotRef.current = { ...rotationRef.current };
+        startPosRef.current = { x: event.clientX, y: event.clientY };
+        const potential = event.target.closest?.('.item__image');
+        tapTargetRef.current = potential || null;
+        return;
+      }
+
+      // ── للتاتش: نبدأ بدون قفل، ونصفر الاتجاه
+      touchDirectionRef.current = null;
       draggingRef.current = true;
       cancelTapRef.current = false;
       movedRef.current = false;
@@ -348,11 +345,56 @@ export default function DomeGallery({
       const potential = event.target.closest?.('.item__image');
       tapTargetRef.current = potential || null;
     },
+
     onDrag: ({ event, last, velocity: velArr = [0, 0], direction: dirArr = [0, 0], movement }) => {
       if (focusedElRef.current || !draggingRef.current || !startPosRef.current) return;
 
-      if (pointerTypeRef.current === 'touch') event.preventDefault();
+      const isTouch = pointerTypeRef.current === 'touch';
 
+      if (isTouch) {
+        const dxTotal = event.clientX - startPosRef.current.x;
+        const dyTotal = event.clientY - startPosRef.current.y;
+        const absDx = Math.abs(dxTotal);
+        const absDy = Math.abs(dyTotal);
+
+        // لو الاتجاه لسه مش متحدد، استنى الـ threshold
+        if (touchDirectionRef.current === null) {
+          if (absDx < DIRECTION_THRESHOLD && absDy < DIRECTION_THRESHOLD) {
+            // لو آخر event، نعمل cleanup
+            if (last) {
+              draggingRef.current = false;
+              startPosRef.current = null;
+              touchDirectionRef.current = null;
+              tapTargetRef.current = null;
+              movedRef.current = false;
+            }
+            return;
+          }
+          // قررنا الاتجاه
+          touchDirectionRef.current = absDx >= absDy ? 'h' : 'v';
+        }
+
+        // لو الاتجاه رأسي → اسيب السكرول يشتغل طبيعي
+        if (touchDirectionRef.current === 'v') {
+          if (last) {
+            draggingRef.current = false;
+            startPosRef.current = null;
+            touchDirectionRef.current = null;
+            tapTargetRef.current = null;
+            movedRef.current = false;
+          }
+          return;
+        }
+
+        // لو أفقي → امنع السكرول واللف
+        event.preventDefault();
+        if (!scrollLockedRef.current) lockScroll();
+      } else {
+        // ماوس: السلوك الأصلي
+        event.preventDefault?.();
+      }
+
+      // ── حساب الـ rotation (مشترك للماوس والتاتش الأفقي)
       const dxTotal = event.clientX - startPosRef.current.x;
       const dyTotal = event.clientY - startPosRef.current.y;
 
@@ -382,7 +424,7 @@ export default function DomeGallery({
           const dx = event.clientX - startPosRef.current.x;
           const dy = event.clientY - startPosRef.current.y;
           const dist2 = dx * dx + dy * dy;
-          const TAP_THRESH_PX = pointerTypeRef.current === 'touch' ? 10 : 6;
+          const TAP_THRESH_PX = isTouch ? 10 : 6;
           if (dist2 <= TAP_THRESH_PX * TAP_THRESH_PX) {
             isTap = true;
           }
@@ -402,7 +444,9 @@ export default function DomeGallery({
         if (!isTap && (Math.abs(vx) > 0.005 || Math.abs(vy) > 0.005)) {
           startInertia(vx, vy);
         }
+
         startPosRef.current = null;
+        touchDirectionRef.current = null;
         cancelTapRef.current = !isTap;
 
         if (isTap && tapTargetRef.current && !focusedElRef.current) {
@@ -413,7 +457,7 @@ export default function DomeGallery({
         if (cancelTapRef.current) setTimeout(() => (cancelTapRef.current = false), 120);
         if (movedRef.current) lastDragEndAt.current = performance.now();
         movedRef.current = false;
-        if (pointerTypeRef.current === 'touch') unlockScroll();
+        if (isTouch) unlockScroll();
       }
     }
   }, { target: mainRef, eventOptions: { passive: false } });
@@ -538,15 +582,11 @@ export default function DomeGallery({
         });
       };
 
-      animatingOverlay.addEventListener('transitionend', cleanup, {
-        once: true
-      });
+      animatingOverlay.addEventListener('transitionend', cleanup, { once: true });
     };
 
     scrim.addEventListener('click', close);
-    const onKey = e => {
-      if (e.key === 'Escape') close();
-    };
+    const onKey = e => { if (e.key === 'Escape') close(); };
     window.addEventListener('keydown', onKey);
 
     return () => {
@@ -681,9 +721,7 @@ export default function DomeGallery({
           overlay.removeEventListener('transitionend', cleanupSecond);
           overlay.style.transition = prevTransition;
         };
-        overlay.addEventListener('transitionend', cleanupSecond, {
-          once: true
-        });
+        overlay.addEventListener('transitionend', cleanupSecond, { once: true });
       };
       overlay.addEventListener('transitionend', onFirstEnd);
     }
@@ -758,16 +796,6 @@ export default function DomeGallery({
       }
     }
     
-    // body.dg-scroll-lock {
-    //   position: fixed !important;
-    //   top: 0;
-    //   left: 0;
-    //   width: 100% !important;
-    //   height: 100% !important;
-    //   overflow: hidden !important;
-    //   touch-action: none !important;
-    //   overscroll-behavior: contain !important;
-    // }
     .item__image {
       position: absolute;
       inset: 10px;
@@ -806,7 +834,8 @@ export default function DomeGallery({
           ref={mainRef}
           className="absolute inset-0 grid place-items-center overflow-hidden select-none bg-transparent"
           style={{
-            touchAction: 'none',
+            // ✅ pan-y بدل none: السكرول الرأسي يشتغل، الأفقي نتحكم فيه بالكود
+            touchAction: 'pan-y',
             WebkitUserSelect: 'none'
           }}>
           <div className="stage">
@@ -832,7 +861,7 @@ export default function DomeGallery({
                     right: '-999px'
                   }}>
                   <div
-                    className="item__image absolute block overflow-hidden cursor-pointer bg-section transition-transform duration-300"
+                    className="item__image absolute block overflow-hidden cursor-pointer bg-background transition-transform duration-300"
                     role="button"
                     tabIndex={0}
                     aria-label={it.alt || 'Open image'}

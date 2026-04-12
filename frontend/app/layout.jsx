@@ -1,7 +1,14 @@
-import { JetBrains_Mono } from "next/font/google";
+import { Poppins, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/components/Providers";
-import { MarketingShell } from "@/components/MarketingShell";
+import { Providers } from "@/components/shared/Providers";
+import { MarketingShell } from "@/components/shared/MarketingShell";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100","200","300","400","500","600","700"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -55,7 +62,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${jetbrainsMono.variable} min-h-screen font-code text-foreground antialiased`}>
+      <body className={`${poppins.variable} min-h-screen font-sans text-foreground antialiased`}>
         <Providers>
           <MarketingShell>{children}</MarketingShell>
         </Providers>

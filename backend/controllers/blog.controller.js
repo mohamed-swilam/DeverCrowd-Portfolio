@@ -3,6 +3,7 @@ const Blog = require("../models/blog.schema.js");
 const httpResponse = require("../utils/httpResponse.js");
 const asyncwrapper = require("../middlewares/asyncWrapper.js");
 const errorHandler = require("../utils/errorHandler.js");
+const Log = require("../models/log.schema");
 const generateUniqueSlug = require("../utils/generateSlug.js");
 const sortBlogs = require("../utils/SortingBlogs.js");
 
@@ -66,7 +67,7 @@ const getSingleBlog = asyncwrapper(async (req, res, next) => {
 });
 
 const createBlog = asyncwrapper(async (req, res, next) => {
-  const { title, subtitle, category, status, slug, body, tags  } = req.body;
+  const { title, subtitle, category, status, slug, body, tags } = req.body;
 
   if (!title || !body) {
     return res.status(400).json({
@@ -90,8 +91,15 @@ const createBlog = asyncwrapper(async (req, res, next) => {
     tags: Array.isArray(tags) ? tags : tags ? [tags] : [],
   });
 
+  
   await blog.save();
-
+  
+  const log = new Log({
+    user_id: req.user.id,
+    log_for: "Blog",
+    description: `${blog.title} Created By ${req.user.username}`
+  })
+  await log.save()
   res.json({
     status: httpResponse.status.ok,
     message: httpResponse.message.createBlog,
@@ -101,7 +109,7 @@ const createBlog = asyncwrapper(async (req, res, next) => {
 
 const modifyBlog = asyncwrapper(async (req, res, next) => {
   const slug = req.params.slug;
-  const { title, subtitle, category, tags, body, status  } =
+  const { title, subtitle, category, tags, body, status } =
     req.body;
 
   let blog = await Blog.findOne({ slug });
@@ -135,6 +143,14 @@ const modifyBlog = asyncwrapper(async (req, res, next) => {
   }
   await blog.save();
 
+  const log = new Log({
+    user_id: req.user.id,
+    log_for: "Blog",
+    description: `${blog.title} Updated By ${req.user.username}`
+  })
+  await log.save()
+
+
   res.json({
     status: httpResponse.status.ok,
     message: httpResponse.message.blogModified,
@@ -156,6 +172,12 @@ const deleteBlog = asyncwrapper(async (req, res, next) => {
   }
 
   await blog.deleteOne();
+  const log = new Log({
+    user_id: req.user.id,
+    log_for: "Blog",
+    description: `${blog.title} Deleted By ${req.user.username}`
+  })
+  await log.save()
 
   res.sendStatus(httpResponse.status.noContent);
 });
@@ -207,7 +229,7 @@ const addLike = asyncwrapper(async (req, res, next) => {
   res.json({
     status: httpResponse.status.ok,
     message: httpResponse.message.likeAdded,
-    data: { totalLikes: blog.likes.length,  liked: true },
+    data: { totalLikes: blog.likes.length, liked: true },
   });
 });
 

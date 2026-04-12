@@ -1,9 +1,13 @@
+import { FaGlobe } from "react-icons/fa";
+import { FaRocket } from "react-icons/fa";
+import { FaStickyNote } from "react-icons/fa";
+
 export const vmc = [
   {
     title: "Vision",
     icon: (
-      <span role="img" aria-label="globe">
-        🌐
+      <span aria-label="globe">
+        <FaGlobe />
       </span>
     ),
     desc: (
@@ -17,8 +21,8 @@ export const vmc = [
   {
     title: "Mission",
     icon: (
-      <span role="img" aria-label="globe">
-        🚀
+      <span aria-label="globe">
+        <FaRocket />
       </span>
     ),
     desc: (
@@ -31,8 +35,8 @@ export const vmc = [
   {
     title: "Approach",
     icon: (
-      <span role="img" aria-label="gear">
-        ⚙️
+      <span aria-label="gear">
+        <FaStickyNote />
       </span>
     ),
     desc: (

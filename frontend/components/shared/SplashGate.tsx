@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 
-const SplashScreen = dynamic(() => import("@/components/SplashScreen"), { ssr: false });
+const SplashScreen = dynamic(() => import("@/components/shared/SplashScreen"), { ssr: false });
 
 interface SplashGateProps {
   children: React.ReactNode;
