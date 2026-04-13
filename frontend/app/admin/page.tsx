@@ -1,6 +1,7 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
-import dynamic from "next/dynamic";
+import dynamicImport  from "next/dynamic";
 import Link from "next/link";
 import { useQueries } from "@tanstack/react-query";
 import { get } from "@/data/api";
@@ -15,7 +16,7 @@ import {
 import { motion } from "motion/react";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
-const AdminChartsSection = dynamic(() => import("./AdminChartsSection"), {
+const AdminChartsSection = dynamicImport (() => import("./AdminChartsSection"), {
   ssr: false,
   loading: () => (
     <Card className="border-border">

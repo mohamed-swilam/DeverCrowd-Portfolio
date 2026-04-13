@@ -1,5 +1,6 @@
 "use client";
 export const dynamic = 'force-dynamic';
+
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -24,7 +25,7 @@ export default function DashboardLayout({ children }) {
     setMobileOpen(false);
   }, [pathname]);
 
-  if (!mounted || isLogin) {
+  if (isLogin) {
     return (
       <>
         <Toaster richColors position="top-right" closeButton />
@@ -32,6 +33,8 @@ export default function DashboardLayout({ children }) {
       </>
     );
   }
+
+  if (!mounted) return null;
 
   return (
     <AdminAuthGate>
