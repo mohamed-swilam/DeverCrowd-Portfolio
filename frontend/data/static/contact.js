@@ -10,9 +10,9 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaGithub } from "react-icons/fa";
 
 export const informations = [
-  { icon: <FaPhone />, key: "Phone", value: "+201030141149" },
-  { icon: <MdMail />, key: "Email", value: "swilam.per@gmail.com" },
-  { icon: <FaMapLocationDot />, key: "Location", value: "Egypt" },
+  { icon: <FaPhone />, key: "phone", value: "+201030141149" },
+  { icon: <MdMail />, key: "email", value: "swilam.per@gmail.com" },
+  { icon: <FaMapLocationDot />, key: "location", value: "Egypt" },
 ];
 
 export const socials = [

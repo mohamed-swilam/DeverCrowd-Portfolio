@@ -1,29 +1,34 @@
 import Logo from "./Logo";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+
 
 interface NavLink {
   href: string;
-  label: string;
+  translationKey: any;
 }
 
 const siteLinks: NavLink[] = [
-  { href: "/", label: "Home" },
-  { href: "#about", label: "About" },
-  { href: "/services", label: "Services" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/works", label: "Works" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", translationKey: "home" },
+  { href: "#about", translationKey: "about" },
+  { href: "/services", translationKey: "services" },
+  { href: "/pricing", translationKey: "pricing" },
+  { href: "/works", translationKey: "works" },
+  { href: "/contact", translationKey: "contact" },
 ];
 
 const socialLinks: NavLink[] = [
-  { href: "https://github.com/DeverCrowd", label: "GitHub" },
-  { href: "https://www.instagram.com/devercrowd/", label: "Instagram" },
-  { href: "https://www.tiktok.com/@devercrowd.com", label: "TikTok" },
-  { href: "https://www.facebook.com/profile.php?id=61577937253222", label: "Facebook" },
-  { href: "https://www.linkedin.com/company/devercrowd/", label: "LinkedIn" },
+  { href: "https://github.com/DeverCrowd", translationKey: "GitHub" },
+  { href: "https://www.instagram.com/devercrowd/", translationKey: "Instagram" },
+  { href: "https://www.tiktok.com/@devercrowd.com", translationKey: "TikTok" },
+  { href: "https://www.facebook.com/profile.php?id=61577937253222", translationKey: "Facebook" },
+  { href: "https://www.linkedin.com/company/devercrowd/", translationKey: "LinkedIn" },
 ];
 
+import { useTranslations } from "next-intl";
+
 export default function Footer() {
+  const tNav = useTranslations("Navigation");
+  
   return (
     <footer
       id="footer"
@@ -47,18 +52,18 @@ export default function Footer() {
         <div className="flex w-full max-w-lg flex-col justify-center gap-10 sm:flex-row sm:gap-16 lg:w-1/2 lg:justify-end">
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <h3 className="pb-1 text-sm font-semibold uppercase tracking-wider text-foreground">Site</h3>
-            {siteLinks.map(({ href, label }) => (
+            {siteLinks.map(({ href, translationKey }) => (
               <Link key={href} href={href} className="text-sm text-muted-foreground transition hover:text-primary">
-                {label}
+                {tNav(translationKey)}
               </Link>
             ))}
           </div>
 
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <h3 className="pb-1 text-sm font-semibold uppercase tracking-wider text-foreground">Social</h3>
-            {socialLinks.map(({ href, label }) => (
+            {socialLinks.map(({ href, translationKey }) => (
               <Link key={href} href={href} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground transition hover:text-primary">
-                {label}
+                {tNav(translationKey)}
               </Link>
             ))}
           </div>

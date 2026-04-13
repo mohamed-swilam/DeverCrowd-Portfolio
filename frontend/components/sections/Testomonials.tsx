@@ -3,6 +3,7 @@ import H1 from "@/components/ui/H1";
 import P from "@/components/ui/P";
 import testimonials from "@/data/dynamic/testimonials";
 import { useRef } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 // ── نقسم الـ testimonials لشريطين، ولو عددهم قليل نكررهم
 const half = Math.ceil(testimonials.length / 2);
@@ -52,14 +53,14 @@ const TestCard = ({ name, role, image, test }: TestCardProps) => (
     <p className="text-sm leading-relaxed text-muted-foreground line-clamp-4">
       {test}
     </p>
-        {/* نجوم */}
-        <div className="flex items-center gap-0.5 mt-0.5">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <svg key={i} className="size-3 fill-amber-400 text-amber-400" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-          ))}
-        </div>
+    {/* نجوم */}
+    <div className="flex items-center gap-0.5 mt-0.5">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg key={i} className="size-3 fill-amber-400 text-amber-400" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+      ))}
+    </div>
   </div>
 );
 
@@ -90,7 +91,7 @@ const MarqueeRow = ({ items, direction, speed = 40 }: MarqueeRowProps) => {
     >
       <div
         ref={trackRef}
-        className="flex gap-4"
+        className="marquee-track flex gap-4"
         style={{
           width: "max-content",
           animation: `marquee-${direction} ${speed}s linear infinite`,
@@ -105,30 +106,35 @@ const MarqueeRow = ({ items, direction, speed = 40 }: MarqueeRowProps) => {
 };
 
 const Testimonials = () => {
+  const t = useTranslations("Testimonials");
+  const locale = useLocale(); // من next-intl
+  const isRTL = locale === 'ar';
   return (
     <section
       id="testimonials"
       className="relative flex w-full flex-col items-center justify-center py-16 overflow-hidden gap-4"
     >
       <style>{`
-        @keyframes marquee-left {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes marquee-right {
-          0%   { transform: translateX(-50%); }
-          100% { transform: translateX(0); }
-        }
-      `}</style>
+  @keyframes marquee-left {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes marquee-right {
+    0%   { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  .marquee-track {
+    direction: ltr !important;
+  }
+`}</style>
 
       {/* blur decoration */}
       <div className="absolute top-1 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-96 rounded-full bg-white/5 blur-3xl opacity-90 pointer-events-none z-0" />
 
       <div className="relative z-10 flex flex-col items-center gap-2 px-4 sm:px-16">
-        <H1>What Our Clients Say</H1>
+        <H1>{t("title")}</H1>
         <P variant="muted" className="max-w-2xl text-center mb-2">
-          We don't just deliver code — we deliver results. Here's what the people
-          we've worked with have to say about the experience.
+          {t("description")}
         </P>
       </div>
 
@@ -139,8 +145,16 @@ const Testimonials = () => {
           WebkitMaskImage: "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
         }}
       >
-        <MarqueeRow items={row1.length ? row1 : testimonials} direction="left" speed={35} />
-        <MarqueeRow items={row2.length ? row2 : testimonials} direction="right" speed={30} />
+        <MarqueeRow
+          items={row1.length ? row1 : testimonials}
+          direction={isRTL ? "right" : "left"}
+          speed={35}
+        />
+        <MarqueeRow
+          items={row2.length ? row2 : testimonials}
+          direction={isRTL ? "left" : "right"}
+          speed={30}
+        />
       </div>
     </section>
   );

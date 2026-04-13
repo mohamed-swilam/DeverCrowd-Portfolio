@@ -5,7 +5,7 @@ import { FaHandsHelping } from "react-icons/fa";
 
 export const services = [
   {
-    title: "Design",
+    key: "design",
     subtitle: "UI/UX & Brand Identity",
     icon: <MdDesignServices />,
     accent: "#a78bfa",
@@ -19,7 +19,7 @@ export const services = [
     ],
   },
   {
-    title: "Development",
+    key: "development",
     subtitle: "Web & Mobile Engineering",
     icon: <IoTerminal />,
     accent: "#38bdf8",
@@ -33,7 +33,7 @@ export const services = [
     ],
   },
   {
-    title: "Security",
+    key: "security",
     subtitle: "Protection & Compliance",
     icon: <BsShieldLockFill />,
     accent: "#34d399",
@@ -47,7 +47,7 @@ export const services = [
     ],
   },
   {
-    title: "Support",
+    key: "support",
     subtitle: "Ongoing Partnership",
     icon: <FaHandsHelping />,
     accent: "#fb923c",

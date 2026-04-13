@@ -8,7 +8,7 @@
   --breakpoint-2xl: 100rem;
   --breakpoint-3xl: 120rem;
 }
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-section: var(--section);
   --color-foreground: var(--foreground);
@@ -48,31 +48,32 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
- 
+
+
 :root {
   --radius: 0.625rem;
 
   /* Background & Foreground */
-  --primary-color:#0f111a;
+  --primary-color: #0f111a;
   --background: #000000;
   --foreground: #e0e0e0;
   --section: #12141f;
-  
+
   /* Cards & Popovers */
   --card: #0e1014;
   --card-foreground: #e0e0e0;
   --popover: #1a1f2b;
   --popover-foreground: #e0e0e0;
-  
+
   /* Primary Buttons */
   --primary: #1e3a8a;
   --darkPrimary: #1e3a8a;
   --primary-foreground: #ffffff;
-  
+
   /* Secondary Buttons / Highlights */
   --secondary: #5c82ff;
   --secondary-foreground: #0f111a;
-  
+
   /* Accent / Highlights */
   --accent: #9238f8;
   --accent-foreground: #ffffff;
@@ -107,50 +108,60 @@
   --sidebar-ring: #3865f8;
 }
 
-/* Light Mode Overrides (اختياري) */
+/* ── Light Mode ── */
 .light {
-  --background: #f7f9fc;
-  --section: #e8ecf5 ;
+  /* Background & Foreground */
+  --background: #ffffff;
   --foreground: #0f111a;
+  --section: #f1f4fb;
 
-  --card: #c9cad3;
+  /* Cards & Popovers */
+  --card: #ffffff;
   --card-foreground: #0f111a;
   --popover: #ffffff;
   --popover-foreground: #0f111a;
 
-  --primary: #3865f8;
+  /* Primary — نفس اللون بس أفتح شوية عشان يبان على أبيض */
+  --primary: #2952d9;
   --darkPrimary: #1e3a8a;
   --primary-foreground: #ffffff;
 
-  --secondary: #5c82ff;
-  --secondary-foreground: #ffffff;
+  /* Secondary */
+  --secondary: #e8eeff;
+  --secondary-foreground: #2952d9;
 
-  --accent: #9238f8;
+  /* Accent */
+  --accent: #7c22e8;
   --accent-foreground: #ffffff;
 
-  --muted: #e0e0e0;
-  --muted-foreground: #5a5a5a;
+  /* Muted */
+  --muted: #f1f4fb;
+  --muted-foreground: #6b7280;
 
-  --destructive: #ff4d4f;
+  /* Destructive */
+  --destructive: #dc2626;
 
-  --border: #e0e0e0;
-  --input: #f0f0f0;
-  --ring: #3865f8;
+  /* Borders & Inputs */
+  --border: rgba(0, 0, 0, 0.08);
+  --input: rgba(0, 0, 0, 0.06);
+  --ring: #2952d9;
 
+  /* Charts — نفس الداكن */
   --chart-1: #3865f8;
-  --chart-2: #5cffb8;
-  --chart-3: #ffe156;
+  --chart-2: #0ea875;
+  --chart-3: #f59e0b;
   --chart-4: #9238f8;
-  --chart-5: #ff914d;
+  --chart-5: #f97316;
 
+  /* Sidebar */
   --sidebar: #ffffff;
   --sidebar-foreground: #0f111a;
-  --sidebar-primary: #3865f8;
+  --sidebar-primary: #2952d9;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #9238f8;
+  --sidebar-accent: #7c22e8;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #e0e0e0;
-  --sidebar-ring: #3865f8;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-ring: #2952d9;
 }
 
 .skip-link {
@@ -200,11 +211,11 @@
   -webkit-text-stroke: 2px #045fd6;
   transition: -webkit-text-stroke 0.3s ease-in-out;
 }
+
 /* Tiptap Editor Styles */
 .tiptap {
   outline: none;
 }
-
 .tiptap h1 {
   font-size: 1.8rem;
   font-weight: 700;
@@ -212,57 +223,47 @@
   margin-top: 1rem;
   line-height: 1.2;
 }
-
 .tiptap h2 {
   font-size: 1.4rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   margin-top: 0.75rem;
 }
-
 .tiptap h3 {
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   margin-top: 0.75rem;
 }
-
 .tiptap p {
   margin-bottom: 0.75rem;
   line-height: 1.7;
 }
-
 .tiptap p:empty {
   min-height: 1rem;
 }
-
 .tiptap ul {
   list-style-type: disc;
   padding-left: 1.5rem;
   margin-bottom: 1rem;
 }
-
 .tiptap ol {
   list-style-type: decimal;
   padding-left: 1.5rem;
   margin-bottom: 1rem;
 }
-
 .tiptap li {
   margin-bottom: 0.25rem;
   line-height: 1.6;
 }
-
 .tiptap strong { font-weight: 700; }
 .tiptap em { font-style: italic; }
 .tiptap u { text-decoration: underline; }
-
 .tiptap a {
   color: var(--primary);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-
 .tiptap pre {
   background: hsl(var(--muted));
   padding: 1rem;
@@ -270,7 +271,6 @@
   overflow-x: auto;
   margin-bottom: 1rem;
 }
-
 .tiptap code {
   font-family: monospace;
   font-size: 0.875rem;
@@ -278,8 +278,15 @@
   padding: 0.1rem 0.3rem;
   border-radius: 0.25rem;
 }
-
 .tiptap pre code {
   background: none;
   padding: 0;
+}
+
+[dir="ltr"] body {
+  font-family: var(--font-poppins) !important;
+}
+
+[dir="rtl"] body {
+  font-family: var(--font-cairo) !important;
 }

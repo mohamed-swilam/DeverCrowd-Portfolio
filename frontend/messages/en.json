@@ -1,0 +1,207 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "about": "About",
+    "works": "Works",
+    "services": "Services",
+    "pricing": "Pricing",
+    "blogs": "Blog",
+    "contact": "Contact",
+    "signIn": "Sign In",
+    "admin": "Admin",
+    "GitHub": "GitHub",
+    "Instagram": "Instagram",
+    "TikTok": "TikTok",
+    "Facebook": "Facebook",
+    "LinkedIn": "LinkedIn"
+  },
+  "Hero": {
+    "title_start": "Build",
+    "highlight": "Digital Solutions",
+    "title_end": "That Grow Your Business",
+    "description": "DeverCrowd is your digital product partner. We design and develop high-performing websites, mobile applications, and custom systems that increase leads, automate operations, and improve customer experience.",
+    "cta_primary": "Book a Discovery Call",
+    "cta_secondary": "View Our Work",
+    "stats": {
+      "Projects": "Projects",
+      "Customers": "Customers",
+      "YrsExp": "Yrs Exp.",
+      "Industries": "Industries"
+    }
+  },
+  "About": {
+    "title": "About DeverCrowd",
+    "description_1": " is a digital product studio focused on building business-ready solutions.",
+    "description_2": "We partner with startups and companies to plan, design, and develop high-performing websites, mobile applications, and scalable platforms that support real growth.",
+    "vmc": {
+      "vision_title": "Vision",
+      "vision_desc": "We aim to be the trusted digital product partner for ambitious businesses, helping them compete, scale, and lead through better digital experiences.",
+      "mission_title": "Mission",
+      "mission_desc": "We build websites, mobile apps, and custom digital solutions that solve real business problems and deliver measurable outcomes.",
+      "approach_title": "Approach",
+      "approach_desc": "We work as a product-minded team: understand your goals, design with users in mind, and deliver reliable software with clear communication at every step."
+    },
+    "explore": "Explore Our Services"
+  },
+  "Footer": {
+    "description": "Building digital products that grow your business.",
+    "links": "Quick Links",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© 2026 DeverCrowd. All rights reserved."
+  },
+  "OurStack": {
+    "title": "The Stack Behind the Work",
+    "description": "Every project is built on a foundation of modern, battle-tested technologies — chosen for performance, scalability, and long-term maintainability."
+  },
+  "OurTeam": {
+    "title": "Who's Behind the Scenes?",
+    "description": "Driven by passion and expertise, our team collaborates to turn ideas into impactful, high-quality digital experiences."
+  },
+  "Testimonials": {
+    "title": "What Our Clients Say",
+    "description": "We don't just deliver code — we deliver results. Here's what the people we've worked with have to say about the experience."
+  },
+  "Contact": {
+    "subtitle": "Contact Us",
+    "title_start": "Let's",
+    "highlight": "Talk",
+    "form": {
+      "form_title": "Send Us a Message",
+      "form_desc": "Fill out the form and we will get back to you within 24 hours.",
+      "form_fields": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "title": "Job Title",
+        "known_by": "How did you hear about us?",
+        "requested_services": "Requested Services",
+        "message": "Message",
+        "submit": "Send"
+      },
+      "form_errors": {
+        "name": "Name is required",
+        "email": "Invalid email address",
+        "phone": "Invalid phone number",
+        "title": "Job title is required",
+        "known_by": "This field is required",
+        "requested_services": "Please select at least one service",
+        "message": "Message is required"
+      }
+    },
+    "info": {
+      "subtitle": "Contact Us",
+      "title_start": "Let's Build",
+      "highlight": "Something Great",
+      "description": "Have a project in mind or just want to say hello? We're always excited to hear from you.",
+      "phone": "Phone",
+      "email": "Email",
+      "location": "Address",
+      "devider": "Find us at"
+    }
+  },
+  "Pricing": {
+    "title_start": "Simple,",
+    "highlight": "transparent",
+    "title_end": "pricing",
+    "description": "Choose the service and plan that works for you. No hidden fees.",
+    "all": "All",
+    "web": "Web",
+    "mobile": "Mobile",
+    "web_mobile": "Web + Mobile",
+    "shopify": "Shopify",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "one_time": "One-time",
+    "save": "Save",
+    "most_popular": "Most Popular",
+    "off": "off",
+    "billed_monthly": "Billed monthly",
+    "billed_yearly": "Billed yearly",
+    "billed_one_time": "One-time payment",
+    "get_started": "Get started",
+    "loading": "Loading plans...",
+    "error": "Failed to load pricing plans. Please try again later.",
+    "empty": "No plans available for this selection.",
+    "free": "Free"
+  },
+  "Works": {
+    "title_start": "Our",
+    "highlight": "Works",
+    "description": "A curated selection of projects we've built — from startups to enterprises.",
+    "all": "All",
+    "loading": "Loading projects...",
+    "error": "Failed to load projects. Please try again later.",
+    "empty": "No projects found."
+  },
+  "Services": {
+    "title_start": "What you",
+    "highlight": "pay for",
+    "subtitle": "What We Offer",
+    "description": "We provide a range of services to achieve your digital goals. Choose what fits you best.",
+    "items": [
+      {
+        "title": "Design",
+        "subtitle": "UI/UX & Brand Identity",
+        "text": "Turn ideas into interfaces that wow. We design sleek, modern visuals that grab attention, build trust, and keep users coming back.",
+        "points": [
+          "Custom UI/UX design systems",
+          "Brand identity & logo design",
+          "Responsive web & mobile interfaces",
+          "Prototyping & user testing"
+        ]
+      },
+      {
+        "title": "Development",
+        "subtitle": "Web & Mobile Engineering",
+        "text": "We build blazing-fast, scalable websites and platforms that work flawlessly — helping you grow, sell, and succeed online.",
+        "points": [
+          "Full-stack web applications",
+          "React Native mobile apps",
+          "REST & GraphQL APIs",
+          "Performance optimization"
+        ]
+      },
+      {
+        "title": "Security",
+        "subtitle": "Protection & Compliance",
+        "text": "Sleep easy — your platform is protected. We secure your data, block threats, and ensure your users always feel safe.",
+        "points": [
+          "Security audits & penetration testing",
+          "SSL, firewall & DDoS protection",
+          "GDPR & data compliance",
+          "24/7 threat monitoring"
+        ]
+      },
+      {
+        "title": "Support",
+        "subtitle": "Ongoing Partnership",
+        "text": "We're your tech partner, not just your developers. Get quick fixes, updates, and ongoing guidance to keep your platform running perfectly.",
+        "points": [
+          "Priority bug fixes & updates",
+          "Monthly performance reports",
+          "Dedicated account manager",
+          "24/7 emergency response"
+        ]
+      }
+    ],
+    "cta_start": "Ready to",
+    "cta_highlight": "build something?",
+    "cta_button": "Start a project",
+    "works_button": "See our work"
+  },
+  "Blogs": {
+    "subtitle": "BLOG",
+    "title_start": "Latest",
+    "highlight": "Articles",
+    "description": "Insights, tutorials, and updates from the DeverCrowd team.",
+    "all": "All",
+    "loading": "Loading blogs...",
+    "error": "Failed to load blogs. Please try again later.",
+    "empty": "No blogs found.",
+    "read_more": "Read more",
+    "back": "Back to Articles",
+    "like": "Like"
+  }
+}

@@ -9,6 +9,7 @@ import { AdminSidebarNav } from "@/components/admin/AdminSidebarNav";
 import { AdminAuthGate } from "@/components/admin/AdminAuthGate";
 import { cn } from "@/lib/utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "../globals.css";
 const queryClient = new QueryClient();
 
 export default function DashboardLayout({ children }) {
@@ -30,8 +31,10 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
-    <AdminAuthGate>
-      <QueryClientProvider client={queryClient}>
+    <html lang="en" suppressHydrationWarning>
+      <body className="font-sans text-foreground antialiased min-h-screen">
+        <AdminAuthGate>
+          <QueryClientProvider client={queryClient}>
       <div className="min-h-screen bg-muted/20">
         <Toaster richColors position="top-right" closeButton />
 
@@ -87,5 +90,7 @@ export default function DashboardLayout({ children }) {
       </div>
       </QueryClientProvider>
     </AdminAuthGate>
+  </body>
+</html>
   );
 }

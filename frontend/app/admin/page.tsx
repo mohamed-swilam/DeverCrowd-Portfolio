@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+
 import { useQueries } from "@tanstack/react-query";
 import { get } from "@/data/api";
 import {

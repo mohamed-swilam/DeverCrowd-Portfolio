@@ -1,5 +1,6 @@
 "use client";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+
 import { FaEnvelope, FaQuestionCircle } from "react-icons/fa";
 import { motion, Variants } from "motion/react";
 import dynamic from "next/dynamic";
@@ -24,7 +25,7 @@ interface Stat {
 const stats: Stat[] = [
   { to: 5, label: "Projects" },
   { to: 3, label: "Customers" },
-  { to: 4, label: "Yrs Exp." },
+  { to: 4, label: "YrsExp" },
   { to: 3, label: "Industries" },
 ];
 
@@ -38,9 +39,13 @@ const itemVariants: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: ["easeOut"] } },
 };
 
+import { useTranslations } from "next-intl";
+
 const MotionP = motion.create(P);
 
 const Hero = () => {
+  const t = useTranslations("Hero");
+
   return (
     <motion.section
       id="hero"
@@ -74,17 +79,15 @@ const Hero = () => {
           className="font-extrabold text-center leading-tight"
           style={{ fontSize: "clamp(28px, 5vw, 52px)", color: "var(--foreground)" }}
         >
-          Build{" "}
+          {t("title_start")}{" "}
           <span style={{ background: "linear-gradient(135deg, var(--primary), var(--accent))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-            Digital Solutions
+            {t("highlight")}
           </span>{" "}
-          That Grow Your Business
+          {t("title_end")}
         </motion.h1>
 
         <MotionP variant="muted" variants={itemVariants} className="text-center max-w-2xl">
-          DeverCrowd is your digital product partner. We design and develop
-          high-performing websites, mobile applications, and custom systems that
-          increase leads, automate operations, and improve customer experience.
+          {t("description")}
         </MotionP>
 
         <motion.div
@@ -106,7 +109,7 @@ const Hero = () => {
                 <CountUp from={0} to={to} duration={1.5} separator="," className="text-2xl sm:text-3xl font-bold text-primary" />
                 <span className="text-xs font-semibold mb-1 text-secondary">+</span>
               </div>
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>
+              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{t(`stats.${label}` as any) || label}</span>
             </div>
           ))}
         </motion.div>
@@ -120,7 +123,7 @@ const Hero = () => {
             onMouseLeave={(e) => { e.currentTarget.style.background = "var(--primary)"; }}
           >
             <FaEnvelope />
-            Book a Discovery Call
+            {t("cta_primary")}
           </Link>
 
           <Link
@@ -131,7 +134,7 @@ const Hero = () => {
             onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--foreground)"; }}
           >
             <FaQuestionCircle />
-            View Our Work
+            {t("cta_secondary")}
           </Link>
         </motion.div>
       </div>
